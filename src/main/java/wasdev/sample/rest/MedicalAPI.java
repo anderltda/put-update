@@ -15,16 +15,13 @@
  *******************************************************************************/
 package wasdev.sample.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
-
-import com.google.gson.Gson;
+import javax.ws.rs.core.MediaType;
 
 import wasdev.sample.store.MedicalStore;
 import wasdev.sample.store.MedicalStoreFactory;
@@ -41,25 +38,20 @@ public class MedicalAPI extends Application {
 	//Our database store
 	MedicalStore store = MedicalStoreFactory.getInstance();
 
-    /**
-     * @return
-     */
-    @GET
-    @Path("findAll")
-    @Produces({"application/json"})
-    public String getMedicals() {
+	/**
+	 * @param me
+	 * @return
+	 */
+	@PUT
+	@Path("/update")
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String update(Medical me) {
 
-		if (store == null) {
-			return "[]";
-		}
-
-		List<Medical> names = new ArrayList<Medical>();
+		String _id = me.get_id();
 		
-		for (Medical medical : store.getAll()) {
-			if (medical != null){
-				names.add(medical);
-			}
-		}
-		return new Gson().toJson(names);
-    }
+		Medical medical = store.update(_id, me);
+		
+		return String.format("O Médico %s foi atualizado com sucesso.", medical.getName());
+	}
 }
