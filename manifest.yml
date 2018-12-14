@@ -1,0 +1,8 @@
+---
+applications:
+ - name: FindAll
+   random-route: false
+   path: target/FindAll.war
+   memory: 1024M
+   instances: 1
+   buildpack: java_buildpack
